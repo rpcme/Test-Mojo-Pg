@@ -119,6 +119,136 @@ sub remove_connections {
   $p->db->query($q);
 }
 
-1;
 
-__END__
+
+
+=head1 NAME
+
+Test::Mojo::Pg - a helper for dealing with Pg during tests
+
+=head1 SYNOPSIS
+
+ use Test::Mojo::Pg;
+ my $db;
+
+ # Bring up database to prepare for tests
+ BEGIN {
+   $db = Test::Mojo::Pg->new(host => 'ananke', db => 'mydb'), 'Test::Mojo::Pg';
+   $db->construct;
+ }
+
+ # Tear down the database to clean the environment
+ END {
+   $db->deconstruct;
+ }
+
+=head1 DESCRIPTION
+
+
+
+Test::Mojo::Pg makes the creation and removal of a transitory database during
+testing when using Mojo::Pg.  This is useful when every test should work from a 'clean' database.
+
+=head1 CONSTRUCTOR
+
+You can either pass options in when calling the constructor or set the attributes later.
+
+ my $p1 = Test::Mojo::Pg->new();
+ my $p2 = Test::Mojo::Pg->new(host=>'myhost', db => 'db1');
+
+Option keys match the attribute names.
+
+=head1 ATTRIBUTES
+
+The following are the attributes for this module.
+
+=head2 host
+
+Sets the Postgres server hostname. If omitted, no hostname (or port, if defined)
+will be configured for the connection string (which effectively means use localhost).
+
+=head2 port
+
+Sets the Postgres server port.  If omitted, no port will be configured for the
+connection string.
+
+=head2 db
+
+Sets the test database name.
+
+default: testdb
+
+=head2 username
+
+Sets the login username.  If omitted, no username will be provided to the server.
+
+=head2 password
+
+Sets the login password.  If omitted, no password will be provided to the server.
+
+=head2 migsql
+
+Sets the file to use for Mojo::Pg::Migrations.  If no sql file is provided, a
+warning will be emitted that only an empty database has been provided.
+
+=head2 verbose
+
+Enables verbose output of operations such as the server's version string.
+
+ # get the verbose level - 0|1
+ $p->verbose;
+
+ # set the verbose level to 'on'
+ $p->verbose(1);
+
+
+=head1 METHODS
+
+The following are the methods for this module.
+
+=head2 construct
+
+The construct method removes current connections to the database and
+the database itself if it exists, creates a new database, and loads the
+migrations file if it's defined. This normally gets called from the BEGIN block.
+
+=head2 deconstruct
+
+The deconstruct method removes current connections to the database and the
+database itself if it exists.  This normally gets called from the END block.
+
+=head1 AUTHORS
+
+Richard A. Elberger E<lt>riche@cpan.orgE<gt>.
+
+=head1 MAINTAINERS
+
+=over 4
+
+=item Richard A. Elberger E<lt>riche@cpan.orgE<gt>
+
+=back
+
+
+=head1 BUGS
+
+See F<http://rt.cpan.org> to report and view bugs.
+
+
+=head1 SOURCE
+
+The source code repository for Test::More can be found at
+F<http://github.com/rpcme/Test-Mojo-Pg/>.
+
+=head1 COPYRIGHT
+
+Copyright 2015 by Richard A. Elberger E<lt>riche@cpan.orgE<gt>.
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+See F<http://www.perl.com/perl/misc/Artistic.html>
+
+=cut
+
+1;
