@@ -10,11 +10,19 @@ use Cwd 'abs_path';
 use Env;
 
 my $build = Module::Build->new(
-    module_name   => 'Test::Mojo::Pg',
-    dist_name     => 'Test::Mojo::Pg',
-    dist_version  => '4.1',
-    dist_author   => 'RICHE',
-    dist_abstract => 'Tear down and bring up databases with Mojo::Pg',
+  configure_requires => {
+    'Module::Build' => 0.42,
+  },
+  module_name   => 'Test::Mojo::Pg',
+  dist_name     => 'Test::Mojo::Pg',
+  dist_version  => '0.1',
+  dist_author   => 'RICHE',
+  dist_abstract => 'Tear down and bring up databases with Mojo::Pg',
+  requires => {
+    'Mojo::Base'     => 0,
+    'Mojo::Pg'       => 0,
+    'File::Basename' => 0,
+  },
 );
 
 $build->create_build_script();
