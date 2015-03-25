@@ -4,6 +4,8 @@ use File::Basename;
 use Mojo::Pg;
 use Mojo::Pg::Migrations;
 
+our $VERSION = '0.2';
+
 has host     => undef;
 has port     => undef;
 has db       => 'testdb';
