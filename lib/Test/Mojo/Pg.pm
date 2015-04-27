@@ -4,7 +4,7 @@ use File::Basename;
 use Mojo::Pg;
 use Mojo::Pg::Migrations;
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 has host     => undef;
 has port     => undef;
@@ -13,18 +13,6 @@ has username => undef;
 has password => undef;
 has migsql   => undef;
 has verbose  => 0;
-
-sub new {
-  my ($class, %options) = @_;
-  my $self = bless {}, $class;
-  $self->host($options{host}) if defined $options{host};
-  $self->port($options{port}) if defined $options{port};
-  $self->db($options{db}) if defined $options{db};
-  $self->username($options{username}) if defined $options{username};
-  $self->password($options{password}) if defined $options{password};
-  $self->migsql($options{migsql}) if defined $options{migsql};
-  return $self;
-}
 
 sub construct {
   my ($self) = @_;
@@ -63,7 +51,7 @@ sub connstring {
              . $self->_connstring_server;
   return $result if defined $dbms;
 
-  $result .= '/' . $self->db if defined $self->db;
+  $result .= '/' . $self->db;
 
   return $result;
 }
@@ -86,6 +74,7 @@ sub drop_database {
   my ($self) = @_;
   # Connect to the DBMS
   my $c = $self->connstring(1);
+  say "Dropping database " . $self->db . " as $c" if $self->verbose;
   my $p = Mojo::Pg->new($c);
   $self->remove_connections($p);
   $p->db->query('drop database if exists ' . $self->db . ';');
@@ -95,6 +84,7 @@ sub drop_database {
 sub create_database {
   my ($self) = @_;
   my $c = $self->connstring(1);
+  say "Creating database defined as $c" if $self->verbose;
   my $p = Mojo::Pg->new($c);
   $p->db->query('create database '. $self->db .';');
 
@@ -104,15 +94,17 @@ sub create_database {
     return 1;
   }
 
-  my $migrations = Mojo::Pg::Migrations->new(pg => $p);
+  my $db = Mojo::Pg->new($self->connstring);
+  my $migrations = Mojo::Pg::Migrations->new(pg => $db);
   $migrations->from_file($self->migsql);
   $migrations->migrate(0)->migrate;
-  $p->db->disconnect;
+  $db->db->disconnect;
   return 1;
 }
 
 sub remove_connections {
   my ($self, $p) = @_;
+  say 'Removing existing connections' if $self->verbose;
   my $pf = $self->get_version($p) < 90200 ? 'procpid' : 'pid';
   my $q = q|SELECT pg_terminate_backend(pg_stat_activity.| . $pf . q|) |
         . q|FROM   pg_stat_activity |
@@ -208,16 +200,54 @@ Enables verbose output of operations such as the server's version string.
 
 The following are the methods for this module.
 
+=head2 connstring
+
+Returns the connection string for the database.  Returns the connection string
+for the dbms by passing in '1'.
+
+  my $testdb_connstring = $testdb->connstring;
+
+  my $testdb_dbms = $testdb->connstring(1);
+
 =head2 construct
 
 The construct method removes current connections to the database and
 the database itself if it exists, creates a new database, and loads the
 migrations file if it's defined. This normally gets called from the BEGIN block.
 
+  $testdb->construct;
+
 =head2 deconstruct
 
 The deconstruct method removes current connections to the database and the
 database itself if it exists.  This normally gets called from the END block.
+
+  $testdb->desconstruct;
+
+=head2 create_database
+
+Creates the database as defined by the connection string.
+
+  $testdb->create_database;
+
+=head2 drop_database
+
+Drops the database as defined by the connection string.
+
+  $testdb->drop_database;
+
+=head2 get_version
+
+  my $version = $testdb->get_version;
+
+Retrieve the database version.
+
+=head2 remove_connections
+
+Force removal of connection related data in the dbms.  Many times required in
+order to drop the database.
+
+  $testdb->remove_connections;
 
 =head1 AUTHORS
 
