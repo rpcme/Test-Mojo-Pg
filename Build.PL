@@ -23,6 +23,14 @@ my $build = Module::Build->new(
     'Mojo::Pg'       => 0,
     'File::Basename' => 0,
   },
+  meta_add => {
+    resources => {
+      homepage   => 'https://github.com/rpcme/Test-Mojo-Pg',
+      repository => 'https://github.com/rpcme/Test-Mojo-Pg.git',
+      bugtracker => 'https://github.com/rpcme/Test-Mojo-Pg/issues',
+      IRC        => 'irc://irc.perl.org/#mojo',
+    },
+  },
 );
 
 $build->create_build_script();
