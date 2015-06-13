@@ -18,6 +18,7 @@ my $build = Module::Build->new(
   dist_version  => '0.3',
   dist_author   => 'RICHE',
   dist_abstract => 'Tear down and bring up databases with Mojo::Pg',
+  license       => 'perl',
   requires => {
     'Mojo::Base'     => 0,
     'Mojo::Pg'       => 0,
