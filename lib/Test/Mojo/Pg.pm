@@ -4,7 +4,7 @@ use File::Basename;
 use Mojo::Pg;
 use Mojo::Pg::Migrations;
 
-our $VERSION = '0.3';
+our $VERSION = '0.31';
 
 has host     => undef;
 has port     => undef;
@@ -113,9 +113,6 @@ sub remove_connections {
   $p->db->query($q);
 }
 
-
-
-
 =head1 NAME
 
 Test::Mojo::Pg - a helper for dealing with Pg during tests
@@ -137,8 +134,6 @@ Test::Mojo::Pg - a helper for dealing with Pg during tests
  }
 
 =head1 DESCRIPTION
-
-
 
 Test::Mojo::Pg makes the creation and removal of a transitory database during
 testing when using Mojo::Pg.  This is useful when every test should work from a 'clean' database.
