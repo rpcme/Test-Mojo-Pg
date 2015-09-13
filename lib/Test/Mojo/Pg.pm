@@ -4,7 +4,7 @@ use File::Basename;
 use Mojo::Pg;
 use Mojo::Pg::Migrations;
 
-our $VERSION = '0.31';
+our $VERSION = '0.32';
 
 has host     => undef;
 has port     => undef;
@@ -66,6 +66,8 @@ sub _connstring_server {
 
 sub _connstring_user {
   my ($self) = @_;
+  return $self->username . ':' . $self->password . '@'
+    if defined $self->username and defined $self->password;;
   return $self->username . '@' if defined $self->username;
   return '';
 }

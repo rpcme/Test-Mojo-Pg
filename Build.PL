@@ -15,7 +15,7 @@ my $build = Module::Build->new(
   },
   module_name   => 'Test::Mojo::Pg',
   dist_name     => 'Test-Mojo-Pg',
-  dist_version  => '0.31',
+  dist_version  => '0.32',
   dist_author   => 'RICHE',
   dist_abstract => 'Tear down and bring up databases with Mojo::Pg',
   license       => 'perl',
