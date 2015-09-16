@@ -67,7 +67,7 @@ sub _connstring_server {
 sub _connstring_user {
   my ($self) = @_;
   return $self->username . ':' . $self->password . '@'
-    if defined $self->username and defined $self->password;;
+    if defined $self->username and defined $self->password;
   return $self->username . '@' if defined $self->username;
   return '';
 }
