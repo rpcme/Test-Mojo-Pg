@@ -29,4 +29,12 @@ isa_ok my $c3 = Test::Mojo::Pg->new(host=>'myhost', port => 12345, db => 'db1'),
 is $c3->connstring, 'postgresql://myhost:12345/db1';
 is $c3->connstring(1), 'postgresql://myhost:12345';
 
+isa_ok my $c4 = Test::Mojo::Pg->new(host=>'myhost', port => 12345, db => 'db1', username => 'riche'), 'Test::Mojo::Pg';
+is $c4->connstring, 'postgresql://riche@myhost:12345/db1';
+is $c4->connstring(1), 'postgresql://riche@myhost:12345';
+
+isa_ok my $c5 = Test::Mojo::Pg->new(host=>'myhost', port => 12345, db => 'db1', username => 'riche', password => 'r1cH3'), 'Test::Mojo::Pg';
+is $c5->connstring, 'postgresql://riche:r1cH3@myhost:12345/db1';
+is $c5->connstring(1), 'postgresql://riche:r1cH3@myhost:12345';
+
 done_testing();
