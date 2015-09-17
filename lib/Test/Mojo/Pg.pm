@@ -258,6 +258,13 @@ Richard A. Elberger E<lt>riche@cpan.orgE<gt>.
 
 =back
 
+=head1 CONTRIBUTORS
+
+=over 4
+
+=item
+
+=back Vladimir N. Indik (vovka667@github)
 
 =head1 BUGS
 
