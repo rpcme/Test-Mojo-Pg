@@ -4,7 +4,7 @@ use File::Basename;
 use Mojo::Pg;
 use Mojo::Pg::Migrations;
 
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 
 has host     => undef;
 has port     => undef;
